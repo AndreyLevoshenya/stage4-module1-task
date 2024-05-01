@@ -1,0 +1,75 @@
+plugins {
+    id 'java-base'
+    id 'application'
+    id 'org.sonarqube' version '5.0.0.4638'
+    id 'jacoco'
+    id 'war'
+}
+
+sonar {
+    properties{
+        property 'sonar.host.url', 'http://localhost:9000'
+        property 'sonar.login', 'squ_5dd0e8c22caa2f89cb9b4c7358c6c2d0fc55c523'
+    }
+}
+
+wrapper {
+    gradleVersion = gradlewVersion
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'war'
+    group = 'com.mjc.school'
+
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa:2.7.7"
+        implementation "org.springframework.boot:spring-boot-starter-hateoas:2.7.7"
+
+        implementation "org.springframework:spring-context:2.7.7"
+        testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.7'
+        testImplementation 'com.h2database:h2:2.2.224'
+        testImplementation "org.springframework:spring-test:2.7.7"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:2.7.7"
+        testImplementation "com.tngtech.archunit:archunit-junit5:1.0.0"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:2.7.7"
+
+        implementation 'org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922'
+    }
+    test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            xml.required = true
+        }
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+task repack(type: Jar, dependsOn: ':module-main:build') {
+    if (findProject(':module-main') != null) {
+        entryCompression = ZipEntryCompression.STORED
+        def buildJar = zipTree("${project(':module-main').buildDir}/libs/module-main.jar")
+        from(buildJar) { into('/') }
+        manifest {
+            attributes(
+                    'Main-Class': 'com.mjc.school.Main'
+            )
+        }
+    }
+}
