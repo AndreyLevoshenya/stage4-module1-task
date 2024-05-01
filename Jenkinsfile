@@ -29,7 +29,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh './gradlew war'
-                deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://192.168.100.13:8888')], contextPath: './app/', war: '**/*.war'
+                deploy adapters: [tomcat8(credentialsId: 'adminDeploy', path: '', url: 'http://192.168.100.13:8888')], contextPath: './app', war: '**/*.war'
             }
         }
     }
