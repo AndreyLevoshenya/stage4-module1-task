@@ -29,7 +29,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh './gradlew war'
-                deploy adapters: [tomcat8(credentialsId: 'adminDeploy', path: '', url: 'http://192.168.100.13:8888')], contextPath: './app', war: '/var/jenkins_home/workspace/sonar-scan/build/libs/sonar-scan.war'
+                deploy adapters: [tomcat8(credentialsId: 'adminDeploy', path: '', url: 'http://192.168.100.13:8888')], contextPath: 'webapps', war: '**/*.war'
             }
         }
     }
