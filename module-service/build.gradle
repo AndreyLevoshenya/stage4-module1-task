@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(':module-repository')
+
+
+
+    implementation 'org.springframework:spring-aspects:6.1.4'
+    implementation "org.mapstruct:mapstruct:$mapstructVersion"
+    annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+}
