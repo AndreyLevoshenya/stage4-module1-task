@@ -30,7 +30,8 @@ pipeline {
             steps {
                 sh './gradlew war'
                 sh 'find . -type f -name "*.war"'
-                deploy adapters: [tomcat9(credentialsId: 'adminDeploy', path: '', url: 'http://192.168.100.13:8888')], contextPath: 'webapps', war: '*/build/libs/stage3-module4-task.war'
+                deploy adapters: [tomcat9(credentialsId: 'adminDeploy', path: '', url: 'http://192.168.100.13:8888')],
+                contextPath: 'webapps', war: 'module-web/build/libs/module-web.war'
             }
         }
     }
