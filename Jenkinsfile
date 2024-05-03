@@ -29,6 +29,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh './gradlew war'
+                ls *.war
                 deploy adapters: [tomcat9(credentialsId: 'adminDeploy', path: '', url: 'http://192.168.100.13:8888')], contextPath: '', war: '**/*.war'
             }
         }
