@@ -54,11 +54,41 @@ jacoco {
     toolVersion = "0.8.11"
 }
 
-task fatWar(type: War) {
-    dependsOn war
-    from 'module-repository/build/libs'
-    from 'module-service/build/libs'
-    from 'module-web/build/libs'
+task repack(type: Jar, dependsOn: ':module-web:build') {
+    if (findProject(':module-web') != null) {
+        entryCompression = ZipEntryCompression.STORED
+        def buildJar = zipTree("${project(':module-web').buildDir}/libs/module-web.jar")
+        from(buildJar) { into('/') }
+        manifest {
+            attributes(
+                    'Main-Class': 'com.mjc.school.Main'
+            )
+        }
+    }
+}
+
+task fatWar(type: War, dependsOn: [':module-repository:build', ':module-service:build', ':module-web:build']) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    if (findProject(':module-repository') != null) {
+        entryCompression = ZipEntryCompression.STORED
+        def buildWar = zipTree("${project(':module-repository').buildDir}/libs/module-repository.war")
+        from(buildWar) { into('/module-repository/') }
+    }
+    if (findProject(':module-service') != null) {
+        entryCompression = ZipEntryCompression.STORED
+        def buildWar = zipTree("${project(':module-service').buildDir}/libs/module-service.war")
+        from(buildWar) { into('/module-service/') }
+    }
+    if (findProject(':module-web') != null) {
+        entryCompression = ZipEntryCompression.STORED
+        def buildJar = zipTree("${project(':module-web').buildDir}/libs/module-web.jar")
+        from(buildJar) { into('/module-web/') }
+        manifest {
+            attributes(
+                    'Main-Class': 'com.mjc.school.Main'
+            )
+        }
+    }
     mainClassName = 'com.mjc.school.Main'
 }
 
