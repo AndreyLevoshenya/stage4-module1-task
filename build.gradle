@@ -54,5 +54,12 @@ jacoco {
     toolVersion = "0.8.11"
 }
 
-war.dependsOn([":module-repository:war", ":module-service:war", ":module-web:war"])
+task fatWar(type: War) {
+    dependsOn war
+    from 'module-repository/build/libs'
+    from 'module-service/build/libs'
+    from 'module-web/build/libs'
+    mainClassName = 'com.mjc.school.Main'
+}
+
 
