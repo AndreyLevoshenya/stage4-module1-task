@@ -81,7 +81,7 @@ task fatWar(type: War, dependsOn: [':module-repository:build', ':module-service:
     }
     if (findProject(':module-web') != null) {
         entryCompression = ZipEntryCompression.STORED
-        def buildJar = zipTree("${project(':module-web').buildDir}/libs/module-web.jar")
+        def buildJar = zipTree("${project(':module-web').buildDir}/libs/module-web.war")
         from(buildJar) { into('/module-web/') }
         manifest {
             attributes(
