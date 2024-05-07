@@ -28,11 +28,10 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh './gradlew war'
-                sh './gradlew fatWar'
+                sh './gradlew bootWar'
                 sh 'find . -type f -name "*.war"'
                 deploy adapters: [tomcat9(credentialsId: 'adminDeploy', path: '', url: 'http://192.168.1.6:8888')],
-                contextPath: 'app', war: 'build/libs/stage3-module4-task.war'
+                contextPath: 'app', war: 'module-web/build/libs/module-web.war'
             }
         }
     }
