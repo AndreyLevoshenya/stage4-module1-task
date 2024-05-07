@@ -1,4 +1,6 @@
-apply plugin: 'org.springframework.boot'
+plugins {
+    id 'org.springframework.boot' version '2.7.7'
+}
 
 dependencies {
     implementation project(':module-service')
@@ -9,4 +11,10 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
     implementation 'com.thegoate:restassured:0.15.17.202305061925'
 
+}
+
+bootWar {
+    archiveBaseName = 'application'
+    version = '1.0.0'
+    mainClass = 'com.mjc.school.Main'
 }
